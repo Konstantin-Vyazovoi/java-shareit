@@ -2,16 +2,13 @@ package ru.practicum.shareit.user;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.shareit.user.dto.CreateUserGroup;
 import ru.practicum.shareit.user.dto.UserDto;
-import ru.practicum.shareit.user.model.User;
 
 import javax.validation.Valid;
 import java.util.List;
-
-/**
- * TODO Sprint add-controllers.
- */
 
 @Slf4j
 @RestController
@@ -42,7 +39,7 @@ public class UserController {
     }
 
     @PostMapping()
-    public UserDto createUser(@Valid @RequestBody User user) {
+    public UserDto createUser(@Validated(CreateUserGroup.class) @RequestBody UserDto user) {
         log.info("Запрошено создание пользователя: {} ", user);
         UserDto createdUser = userService.createUser(user);
         log.info("Запрос на создание пользователя выполнен, пользователь создан: {} ", createdUser);

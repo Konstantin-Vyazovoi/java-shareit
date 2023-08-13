@@ -3,28 +3,25 @@ package ru.practicum.shareit.item;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.shareit.item.dto.CreateGroup;
+import ru.practicum.shareit.item.dto.CreateItemGroup;
 import ru.practicum.shareit.item.dto.ItemDto;
 
-import javax.validation.Valid;
 import java.util.List;
 
-/**
- * TODO Sprint add-controllers.
- */
 @RestController
 @RequestMapping("/items")
 public class ItemController {
 
-    @Autowired
     private final ItemService itemService;
+    private final String headerUserId = "X-Sharer-User-Id";
 
+    @Autowired
     public ItemController(ItemService itemService) {
         this.itemService = itemService;
     }
 
     @GetMapping
-    public List<ItemDto> getItems(@RequestHeader("X-Sharer-User-Id") int userId) {
+    public List<ItemDto> getItems(@RequestHeader(headerUserId) int userId) {
         return itemService.getItems(userId);
     }
 
@@ -39,14 +36,14 @@ public class ItemController {
     }
 
     @PostMapping()
-    public ItemDto createItem(@RequestHeader("X-Sharer-User-Id") int userId,
-                              @Validated(CreateGroup.class) @RequestBody ItemDto item) {
+    public ItemDto createItem(@RequestHeader(headerUserId) int userId,
+                              @Validated(CreateItemGroup.class) @RequestBody ItemDto item) {
         return itemService.createItem(item, userId);
     }
 
     @PatchMapping("/{id}")
-    public ItemDto updateItem(@RequestHeader("X-Sharer-User-Id") int userId,
-                              @Valid @RequestBody ItemDto item,
+    public ItemDto updateItem(@RequestHeader(headerUserId) int userId,
+                              @RequestBody ItemDto item,
                               @PathVariable int id) {
         return itemService.updateItem(id, item, userId);
     }

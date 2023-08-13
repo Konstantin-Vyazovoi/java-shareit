@@ -11,7 +11,7 @@ public interface UserStorage {
 
     List<UserDto> getUsers();
 
-    UserDto createUser(User user);
+    UserDto createUser(UserDto user);
 
     UserDto updateUser(int id, UserDto user);
 

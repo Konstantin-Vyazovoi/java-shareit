@@ -6,18 +6,14 @@ import lombok.Data;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-/**
- * TODO Sprint add-controllers.
- */
-
 @Data
 @AllArgsConstructor
 public class ItemDto {
     private Integer id;
-    @NotBlank(groups = CreateGroup.class)
+    @NotBlank(groups = CreateItemGroup.class)
     private String name;
-    @NotBlank(groups = CreateGroup.class)
+    @NotBlank(groups = CreateItemGroup.class)
     private String description;
-    @NotNull(groups = CreateGroup.class)
+    @NotNull(groups = CreateItemGroup.class)
     private Boolean available;
 }
