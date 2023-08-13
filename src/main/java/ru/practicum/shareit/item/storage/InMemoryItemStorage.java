@@ -70,3 +70,4 @@ public class InMemoryItemStorage implements ItemStorage {
         return ++idGenerated;
     }
 }
+
