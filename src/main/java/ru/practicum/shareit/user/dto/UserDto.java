@@ -14,7 +14,8 @@ public class UserDto {
     private final Integer id;
     @NotBlank(groups = {CreateUserGroup.class}, message = "Имя не может быть пустым")
     private String name;
-    @Email(groups = {CreateUserGroup.class}, regexp = "^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$", message = "Неверный email")
+    @Email(groups = {
+        CreateUserGroup.class}, regexp = "^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$", message = "Неверный email")
     @NotBlank(groups = {CreateUserGroup.class}, message = "Email не может быть пустым")
     private String email;
 }
