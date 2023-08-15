@@ -1,7 +1,6 @@
 package ru.practicum.shareit.item.storage;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.item.dto.ItemDto;
@@ -13,7 +12,6 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Component
-@Qualifier("InMemoryItemStorage")
 public class InMemoryItemStorage implements ItemStorage {
 
     private final Map<Integer, Item> itemsMap = new HashMap<>();

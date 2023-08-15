@@ -49,7 +49,9 @@ public class ItemService {
 
     public ItemDto updateItem(Integer id, ItemDto itemDto, Integer owner) {
         log.info("Обновление предмета с id пользователя {}, id предмета {}", owner, id);
-        if (itemStorage.getItem(id).getOwner() != owner) throw new NotFoundException("Пользователь не найден");
+        Item item = itemStorage.getItem(id);
+        if (item == null) throw new NotFoundException("Предмет не найден");
+        if (item.getOwner() != owner) throw new NotFoundException("Пользователь не найден");
         return ItemMapper.toItemDto(itemStorage.updateItem(id, itemDto));
     }
 

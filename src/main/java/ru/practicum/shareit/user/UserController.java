@@ -4,10 +4,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.shareit.user.dto.CreateUserGroup;
+import ru.practicum.shareit.interfaces.CreateGroup;
+import ru.practicum.shareit.interfaces.UpdateGroup;
 import ru.practicum.shareit.user.dto.UserDto;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @Slf4j
@@ -39,7 +39,7 @@ public class UserController {
     }
 
     @PostMapping()
-    public UserDto createUser(@Validated(CreateUserGroup.class) @RequestBody UserDto user) {
+    public UserDto createUser(@Validated(CreateGroup.class) @RequestBody UserDto user) {
         log.info("Запрошено создание пользователя: {} ", user);
         UserDto createdUser = userService.createUser(user);
         log.info("Запрос на создание пользователя выполнен, пользователь создан: {} ", createdUser);
@@ -47,7 +47,7 @@ public class UserController {
     }
 
     @PatchMapping("/{id}")
-    public UserDto updateUser(@Valid @RequestBody UserDto user, @PathVariable int id) {
+    public UserDto updateUser(@Validated(UpdateGroup.class) @RequestBody UserDto user, @PathVariable int id) {
         log.info("Запрошено обновление пользователя: {} ", user);
         UserDto updatedUser = userService.updateUser(id, user);
         log.info("Запрос выполнен, пользователь обновлен: {} ", updatedUser);
