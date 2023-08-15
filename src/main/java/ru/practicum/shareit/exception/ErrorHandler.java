@@ -36,12 +36,21 @@ public class ErrorHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handleNotFoundException(final NotFoundException e) {
+        log.error("Получен статус 404 Not found: {}", e.getMessage(), e);
         return new ErrorResponse(e.getMessage());
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.CONFLICT)
     public ErrorResponse handleValidationException(final ValidateException e) {
+        log.error("Получен статус 409 Conflict: {}", e.getMessage(), e);
+        return new ErrorResponse(e.getMessage());
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ErrorResponse handleThrowableException(final Throwable e) {
+        log.error("Получен статус 500 Internal server error: {}", e.getMessage(), e);
         return new ErrorResponse(e.getMessage());
     }
 }

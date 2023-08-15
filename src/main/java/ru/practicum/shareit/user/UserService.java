@@ -2,14 +2,13 @@ package ru.practicum.shareit.user;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.exception.ValidateException;
 import ru.practicum.shareit.user.dto.UserDto;
-import ru.practicum.shareit.user.dto.UserMapper;
-import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.storage.UserStorage;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -17,22 +16,27 @@ import java.util.stream.Collectors;
 @Service
 public class UserService {
 
+    private final UserStorage userStorage;
+
     @Autowired
-    @Qualifier("InMemoryUserStorage")
-    private UserStorage userStorage;
+    public UserService(UserStorage userStorage) {
+        this.userStorage = userStorage;
+    }
 
     public UserDto getUser(int id) {
         validateUserEmail(userStorage.getUser(id), id);
-        return userStorage.getUser(id);
+        UserDto userDto = userStorage.getUser(id);
+        if (userDto == null) throw new NotFoundException("Пользователь не найден!");
+        return userDto;
     }
 
     public List<UserDto> getUsers() {
         return userStorage.getUsers();
     }
 
-    public UserDto createUser(User user) {
+    public UserDto createUser(@Valid UserDto user) {
         if (!userStorage.getUsers().isEmpty()) {
-            validateUserEmail(UserMapper.toUserDto(user), user.getId());
+            validateUserEmail(user, 0);
         }
         return userStorage.createUser(user);
     }
@@ -46,13 +50,14 @@ public class UserService {
         userStorage.deleteUser(id);
     }
 
-    private void validateUserEmail(UserDto user, Integer id) {
+    private void validateUserEmail(UserDto userDto, int id) {
         List<UserDto> userList;
         userList = getUsers()
             .stream()
-            .filter(u -> u.getEmail().equals(user.getEmail()))
+            .filter(u -> u.getEmail().equals(userDto.getEmail()))
             .collect(Collectors.toList());
-        if (!userList.isEmpty() && !userList.contains(userStorage.getUser(id))) {
+        UserDto user = userStorage.getUser(id);
+        if (!userList.isEmpty() && !userList.contains(user)) {
             throw new ValidateException("Пользователь с такой почтой уже есть");
         }
     }

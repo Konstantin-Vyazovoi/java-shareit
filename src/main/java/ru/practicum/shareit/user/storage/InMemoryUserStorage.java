@@ -1,21 +1,19 @@
 package ru.practicum.shareit.user.storage;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.dto.UserMapper;
 import ru.practicum.shareit.user.model.User;
 
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @Slf4j
 @Component
-@Qualifier("InMemoryUserStorage")
 public class InMemoryUserStorage implements UserStorage {
 
     private final Map<Integer, User> users = new HashMap<>();
@@ -25,33 +23,36 @@ public class InMemoryUserStorage implements UserStorage {
     public UserDto getUser(int id) {
         if (users.containsKey(id)) {
             return UserMapper.toUserDto(users.get(id));
-        } else throw new NotFoundException("Пользователь не найден!");
+        } else return null;
     }
 
     @Override
     public List<UserDto> getUsers() {
-        List<User> userList = new ArrayList(users.values());
+        Collection<User> userList = users.values();
         return UserMapper.userDtoList(userList);
     }
 
     @Override
-    public UserDto createUser(User user) {
+    public UserDto createUser(UserDto userDto) {
+        User user = UserMapper.fromUserDto(userDto);
         user.setId(generateId());
         users.put(user.getId(), user);
         return UserMapper.toUserDto(user);
     }
 
     @Override
-    public UserDto updateUser(int id, UserDto user) {
-        if (users.containsKey(id)) {
-            User storageUser = users.get(id);
-            if (user.getName() != null) {
-                storageUser.setName(user.getName());
+    public UserDto updateUser(int id, UserDto userDto) {
+        User user = users.get(id);
+        if (user != null) {
+            String name = userDto.getName();
+            String email = userDto.getEmail();
+            if (name != null && !name.isBlank()) {
+                user.setName(userDto.getName());
             }
-            if (user.getEmail() != null) {
-                storageUser.setEmail(user.getEmail());
+            if (email != null && !email.isBlank()) {
+                user.setEmail(userDto.getEmail());
             }
-            return UserMapper.toUserDto(storageUser);
+            return UserMapper.toUserDto(user);
         }
         throw new NotFoundException("Пользователь не найден!");
     }
