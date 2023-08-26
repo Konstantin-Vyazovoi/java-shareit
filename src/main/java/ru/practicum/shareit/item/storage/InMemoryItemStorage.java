@@ -32,9 +32,9 @@ public class InMemoryItemStorage implements ItemStorage {
     public Item createItem(ItemDto itemDto, int userId) {
         Item item = ItemMapper.fromItemDto(itemDto);
         item.setId(generateId());
-        item.setOwner(userId);
+        item.setOwnerId(userId);
         itemsMap.put(item.getId(), item);
-        final List<Item> items = userItemIndex.computeIfAbsent(item.getOwner(), k -> new ArrayList<>());
+        final List<Item> items = userItemIndex.computeIfAbsent(item.getOwnerId(), k -> new ArrayList<>());
         items.add(item);
         userItemIndex.put(userId, items);
         return item;

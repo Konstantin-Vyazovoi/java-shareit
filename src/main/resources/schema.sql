@@ -26,7 +26,6 @@ CREATE TABLE if NOT EXISTS items
     description VARCHAR(200) NOT NULL,
     available BOOLEAN,
     owner_id INTEGER references users (id),
-    request_id INTEGER references requests (id),
     CONSTRAINT pk_item PRIMARY KEY (id)
 );
 

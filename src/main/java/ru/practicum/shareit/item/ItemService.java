@@ -5,12 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.item.dto.ItemDto;
-import ru.practicum.shareit.item.dto.ItemMapper;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.storage.ItemRepository;
-import ru.practicum.shareit.item.storage.ItemStorage;
 import ru.practicum.shareit.user.storage.UserRepository;
-import ru.practicum.shareit.user.storage.UserStorage;
 
 import java.util.Collections;
 import java.util.List;
@@ -33,7 +30,7 @@ public class ItemService {
 
     public List<ItemDto> getItems(int userId) {
         log.info("Получение списка предметов пользователя с id: {}", userId);
-        return itemDtoList(itemStorage.findeAllByOwner(userId));
+        return itemDtoList(itemStorage.findAllByOwnerId(userId));
     }
 
     public ItemDto getItem(Integer id) {
@@ -49,7 +46,7 @@ public class ItemService {
         if (userId > 0 && userStorage.findById(userId).isPresent()) {
             log.info("Создание предмета : {}, ", itemDto);
             Item item = fromItemDto(itemDto);
-            item.setOwner(userId);
+            item.setOwnerId(userId);
             return toItemDto(itemStorage.save(item));
         } else throw new NotFoundException("Пользователь не найден");
     }
@@ -59,7 +56,7 @@ public class ItemService {
         Optional<Item> optionalItem = itemStorage.findById(id);
         if (optionalItem.isEmpty()) throw new NotFoundException("Предмет не найден");
         Item item = optionalItem.get();
-        if (optionalItem.get().getOwner() != owner) throw new NotFoundException("Пользователь не найден");
+        if (optionalItem.get().getOwnerId() != owner) throw new NotFoundException("Пользователь не найден");
         if (itemDto.getAvailable() != null) item.setAvailable(itemDto.getAvailable());
         if (itemDto.getName() != null && !itemDto.getName().isBlank()) item.setName(itemDto.getName());
         if (itemDto.getDescription() != null && !itemDto.getDescription().isBlank()) {
@@ -68,9 +65,11 @@ public class ItemService {
         return toItemDto(itemStorage.save(item));
     }
 
-    public List<ItemDto> searchItems(String itemName) {
-        log.info("Поиск предмета по строке: {}", itemName);
-        if (itemName.isBlank()) return Collections.emptyList();
-        return itemDtoList(itemStorage.searchItems(itemName.toLowerCase()));
+    public List<ItemDto> searchItems(String searchText) {
+        log.info("Поиск предмета по строке: {}", searchText);
+        if (searchText.isBlank()) return Collections.emptyList();
+        return itemDtoList(itemStorage.
+            findAllByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCaseAndAvailableIsTrue
+                (searchText, searchText));
     }
 }

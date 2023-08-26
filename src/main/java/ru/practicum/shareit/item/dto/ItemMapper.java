@@ -14,12 +14,11 @@ public class ItemMapper {
     }
 
     public Item fromItemDto(ItemDto itemDto) {
-        return Item.builder()
-            .id(itemDto.getId())
-            .name(itemDto.getName())
-            .description(itemDto.getDescription())
-            .available(itemDto.getAvailable())
-            .build();
+        return new Item(itemDto.getId(),
+            itemDto.getName(),
+            itemDto.getDescription(),
+            0,
+            itemDto.getAvailable());
     }
 
     public List<ItemDto> itemDtoList(List<Item> items) {

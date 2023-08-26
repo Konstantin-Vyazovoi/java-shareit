@@ -1,15 +1,17 @@
 package ru.practicum.shareit.item.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import ru.practicum.shareit.request.ItemRequest;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Data
-@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "items", schema = "public")
 public class Item {
@@ -22,9 +24,9 @@ public class Item {
     @Column(name = "description")
     private String description;
     @Column(name = "owner_id")
-    private int owner;
+    private int ownerId;
     @Column(name = "available")
     private Boolean available;
-    @Column(name = "request_id")
-    private int request;
+    //@Column(name = "request_id")
+    //private int request;
 }
