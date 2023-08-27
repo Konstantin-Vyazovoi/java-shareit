@@ -69,7 +69,7 @@ public class ItemService {
         log.info("Поиск предмета по строке: {}", searchText);
         if (searchText.isBlank()) return Collections.emptyList();
         return itemDtoList(itemStorage.
-            findAllByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCaseAndAvailableIsTrue
-                (searchText, searchText));
+            searchItem
+                (searchText));
     }
 }
