@@ -3,9 +3,9 @@ package ru.practicum.shareit.item;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.exception.NotFoundException;
-import ru.practicum.shareit.item.dto.ItemDto;
-import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.item.dto.Item;
 import ru.practicum.shareit.item.storage.ItemRepository;
 import ru.practicum.shareit.user.storage.UserRepository;
 
@@ -17,6 +17,7 @@ import static ru.practicum.shareit.item.dto.ItemMapper.*;
 
 @Slf4j
 @Service
+@Transactional(readOnly = true)
 public class ItemService {
 
     private final ItemRepository itemStorage;
@@ -28,34 +29,38 @@ public class ItemService {
         this.userStorage = userStorage;
     }
 
-    public List<ItemDto> getItems(int userId) {
+    @Transactional
+    public List<Item> getItems(int userId) {
         log.info("Получение списка предметов пользователя с id: {}", userId);
         return itemDtoList(itemStorage.findAllByOwnerId(userId));
     }
 
-    public ItemDto getItem(Integer id) {
+    @Transactional
+    public Item getItem(Integer id) {
         log.info("Получение предмета с id: {}", id);
-        Optional<Item> item = itemStorage.findById(id);
+        Optional<ru.practicum.shareit.item.model.Item> item = itemStorage.findById(id);
         if (item.isEmpty()) throw new NotFoundException("Предмет не найден");
         log.info("Предмет получен : {}", item);
         return toItemDto(item.get());
     }
 
-    public ItemDto createItem(ItemDto itemDto, int userId) {
+    @Transactional
+    public Item createItem(Item itemDto, int userId) {
         log.info("Создание предмета с id пользователя: {}", userId);
         if (userId > 0 && userStorage.findById(userId).isPresent()) {
             log.info("Создание предмета : {}, ", itemDto);
-            Item item = fromItemDto(itemDto);
+            ru.practicum.shareit.item.model.Item item = fromItemDto(itemDto);
             item.setOwnerId(userId);
             return toItemDto(itemStorage.save(item));
         } else throw new NotFoundException("Пользователь не найден");
     }
 
-    public ItemDto updateItem(Integer id, ItemDto itemDto, Integer owner) {
+    @Transactional
+    public Item updateItem(Integer id, Item itemDto, Integer owner) {
         log.info("Обновление предмета с id пользователя {}, id предмета {}", owner, id);
-        Optional<Item> optionalItem = itemStorage.findById(id);
+        Optional<ru.practicum.shareit.item.model.Item> optionalItem = itemStorage.findById(id);
         if (optionalItem.isEmpty()) throw new NotFoundException("Предмет не найден");
-        Item item = optionalItem.get();
+        ru.practicum.shareit.item.model.Item item = optionalItem.get();
         if (optionalItem.get().getOwnerId() != owner) throw new NotFoundException("Пользователь не найден");
         if (itemDto.getAvailable() != null) item.setAvailable(itemDto.getAvailable());
         if (itemDto.getName() != null && !itemDto.getName().isBlank()) item.setName(itemDto.getName());
@@ -65,7 +70,8 @@ public class ItemService {
         return toItemDto(itemStorage.save(item));
     }
 
-    public List<ItemDto> searchItems(String searchText) {
+    @Transactional
+    public List<Item> searchItems(String searchText) {
         log.info("Поиск предмета по строке: {}", searchText);
         if (searchText.isBlank()) return Collections.emptyList();
         return itemDtoList(itemStorage.

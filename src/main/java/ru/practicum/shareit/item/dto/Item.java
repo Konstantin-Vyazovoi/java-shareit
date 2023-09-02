@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
 
 @Data
 @AllArgsConstructor
-public class ItemDto {
+public class Item {
     private Integer id;
     @NotBlank(groups = CreateGroup.class)
     private String name;
