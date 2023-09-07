@@ -32,8 +32,9 @@ public class BookingController {
 
     @PatchMapping("/{bookingId}")
     public BookingResponseDto updateBooking(@RequestHeader(headerUserId) Integer userId,
-                                            @PathVariable("bookingId") Integer bookingId, String approved) {
-        log.info("Получен запрос обновления от пользователя с id: {}, на бронирование: {}, со статусом: {}", userId, bookingId, approved);
+                                            @PathVariable("bookingId") Integer bookingId, Boolean approved) {
+        log.info("Получен запрос обновления от пользователя с id: {}, на бронирование: {}, со статусом: {}",
+            userId, bookingId, approved);
         return bookingService.updateBookingStatus(bookingId, userId, approved);
     }
 

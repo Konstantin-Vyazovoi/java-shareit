@@ -1,29 +1,28 @@
-package ru.practicum.shareit.booking;
+package ru.practicum.shareit.booking.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.model.User;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-
-import static javax.persistence.GenerationType.IDENTITY;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "bookings", schema = "public")
 public class Booking {
     @Id
-    @GeneratedValue(strategy = IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
     @Column(name = "start_date")
-    private LocalDateTime start;
+    private LocalDateTime startDate;
     @Column(name = "end_date")
-    private LocalDateTime end;
+    private LocalDateTime endDate;
     @ManyToOne
     @JoinColumn(name = "item_id")
     private Item item;

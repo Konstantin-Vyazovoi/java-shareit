@@ -37,7 +37,7 @@ CREATE TABLE if NOT EXISTS bookings
     item_id INTEGER references items (id),
     booker_id INTEGER references users (id),
     status booking_status NOT NULL,
-    CONSTRAINT pk_bookings PRIMARY KEY (id)
+    CONSTRAINT pk_booking PRIMARY KEY (id)
 
 );
 

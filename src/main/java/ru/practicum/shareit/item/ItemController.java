@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.interfaces.CreateGroup;
-import ru.practicum.shareit.item.dto.Item;
+import ru.practicum.shareit.item.dto.ItemDto;
 
 import java.util.List;
 
@@ -21,30 +21,31 @@ public class ItemController {
     }
 
     @GetMapping
-    public List<Item> getItems(@RequestHeader(headerUserId) int userId) {
+    public List<ItemDto> getItems(@RequestHeader(headerUserId) int userId) {
         return itemService.getItems(userId);
     }
 
     @GetMapping("/{id}")
-    public Item getItem(@PathVariable int id) {
-        return itemService.getItem(id);
+    public ItemDto getItem(@RequestHeader(headerUserId) int userId,
+                           @PathVariable int id) {
+        return itemService.getItem(id, userId);
     }
 
     @GetMapping("/search")
-    public List<Item> searchItems(@RequestParam("text") String itemName) {
+    public List<ItemDto> searchItems(@RequestParam("text") String itemName) {
         return itemService.searchItems(itemName);
     }
 
     @PostMapping()
-    public Item createItem(@RequestHeader(headerUserId) int userId,
-                           @Validated(CreateGroup.class) @RequestBody Item item) {
+    public ItemDto createItem(@RequestHeader(headerUserId) int userId,
+                              @Validated(CreateGroup.class) @RequestBody ItemDto item) {
         return itemService.createItem(item, userId);
     }
 
     @PatchMapping("/{id}")
-    public Item updateItem(@RequestHeader(headerUserId) int userId,
-                           @RequestBody Item item,
-                           @PathVariable int id) {
+    public ItemDto updateItem(@RequestHeader(headerUserId) int userId,
+                              @RequestBody ItemDto item,
+                              @PathVariable int id) {
         return itemService.updateItem(id, item, userId);
     }
 }
