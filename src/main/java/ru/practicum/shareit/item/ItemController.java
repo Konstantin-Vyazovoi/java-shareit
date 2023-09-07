@@ -4,8 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.interfaces.CreateGroup;
+import ru.practicum.shareit.item.comment.dto.CommentDto;
+import ru.practicum.shareit.item.comment.dto.CommentDtoResponse;
 import ru.practicum.shareit.item.dto.ItemDto;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -47,5 +50,12 @@ public class ItemController {
                               @RequestBody ItemDto item,
                               @PathVariable int id) {
         return itemService.updateItem(id, item, userId);
+    }
+
+    @PostMapping("/{itemId}/comment")
+    public CommentDtoResponse createComment(@RequestHeader(headerUserId) Integer userId,
+                                            @PathVariable Integer itemId,
+                                            @Valid @RequestBody CommentDto commentDto) {
+        return itemService.createComment(userId, itemId, commentDto);
     }
 }

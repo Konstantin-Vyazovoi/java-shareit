@@ -20,7 +20,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static ru.practicum.shareit.booking.dto.BookingMapper.*;
 
@@ -34,7 +33,7 @@ public class BookingServiceImpl implements BookingService {
 
     @Autowired
     public BookingServiceImpl(BookingRepository bookingRepository, UserRepository userRepository,
-                               ItemRepository itemRepository) {
+                              ItemRepository itemRepository) {
         this.bookingRepository = bookingRepository;
         this.userRepository = userRepository;
         this.itemRepository = itemRepository;
@@ -64,7 +63,8 @@ public class BookingServiceImpl implements BookingService {
         Optional<Item> item = itemRepository.findById(booking.getItem().getId());
         if (item.isEmpty()) throw new NotFoundException("Предмет не найден");
         boolean isOwnerRequest = item.get().getOwnerId() == userId;
-        if (userId == booking.getBooker().getId()) throw new NotFoundException("Нет доступа к изменению статуса бронирования");
+        if (userId == booking.getBooker().getId())
+            throw new NotFoundException("Нет доступа к изменению статуса бронирования");
         if (!isOwnerRequest) throw new BadRequestException("Нет доступа к изменению статуса бронирования");
         if (booking.getStatus() != BookingStatus.WAITING) throw new BadRequestException("Не правльный статус");
         if (approved) {
@@ -99,22 +99,19 @@ public class BookingServiceImpl implements BookingService {
                 return toListBookingResp(bookingRepository
                     .findAllByBookerIdAndStartDateBeforeAndEndDateAfterOrderByStartDateDesc(
                         bookerId,
-                        dateNow,
-                        dateNow));
+                        LocalDateTime.now(),
+                        LocalDateTime.now()));
             case "FUTURE":
                 return toListBookingResp(bookingRepository
                     .findAllByBookerIdAndStartDateAfterOrderByStartDateDesc(
                         bookerId,
-                        dateNow));
+                        LocalDateTime.now()));
             case "PAST":
                 return toListBookingResp(bookingRepository
                     .findAllByBookerIdAndEndDateBeforeOrderByStartDateDesc(
                         bookerId,
-                        dateNow));
+                        LocalDateTime.now()));
             case "WAITING":
-                return toListBookingResp(bookingRepository
-                    .findAllByBookerIdAndStatusOrderByStartDateDesc(bookerId,
-                        BookingStatus.valueOf(status)));
             case "REJECTED":
                 return toListBookingResp(bookingRepository
                     .findAllByBookerIdAndStatusOrderByStartDateDesc(bookerId,
@@ -136,22 +133,19 @@ public class BookingServiceImpl implements BookingService {
                 return toListBookingResp(bookingRepository
                     .findAllByItemOwnerIdAndStartDateBeforeAndEndDateAfterOrderByStartDateDesc(
                         userId,
-                        dateNow,
-                        dateNow));
+                        LocalDateTime.now(),
+                        LocalDateTime.now()));
             case "FUTURE":
                 return toListBookingResp(bookingRepository
                     .findAllByItemOwnerIdAndStartDateAfterOrderByStartDateDesc(
                         userId,
-                        dateNow));
+                        LocalDateTime.now()));
             case "PAST":
                 return toListBookingResp(bookingRepository
                     .findAllByItemOwnerIdAndEndDateBeforeOrderByStartDateDesc(
                         userId,
-                        dateNow));
+                        LocalDateTime.now()));
             case "WAITING":
-                return toListBookingResp(bookingRepository
-                    .findAllByItemOwnerIdAndStatusOrderByStartDateDesc(userId,
-                        BookingStatus.valueOf(status)));
             case "REJECTED":
                 return toListBookingResp(bookingRepository
                     .findAllByItemOwnerIdAndStatusOrderByStartDateDesc(userId,
