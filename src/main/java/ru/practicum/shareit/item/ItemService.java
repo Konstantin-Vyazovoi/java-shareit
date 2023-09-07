@@ -17,6 +17,7 @@ import ru.practicum.shareit.item.comment.dto.CommentDtoResponse;
 import ru.practicum.shareit.item.comment.dto.CommentMapper;
 import ru.practicum.shareit.item.comment.model.Comment;
 import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.item.dto.ItemMapper;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.storage.ItemRepository;
 import ru.practicum.shareit.user.model.User;
@@ -29,8 +30,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static ru.practicum.shareit.item.comment.dto.CommentMapper.toCommentList;
-import static ru.practicum.shareit.item.dto.ItemMapper.fromItemDto;
-import static ru.practicum.shareit.item.dto.ItemMapper.toItemDto;
 
 @Slf4j
 @Service
@@ -64,7 +63,7 @@ public class ItemService {
         if (item.isEmpty()) throw new NotFoundException("Предмет не найден");
         log.info("Предмет получен : {}", item);
         List<Comment> commentList = commentRepository.findAllByItemId(item.get().getId());
-        ItemDto itemDto = toItemDto(item.get(), toCommentList(commentList));
+        ItemDto itemDto = ItemMapper.toItemDto(item.get(), toCommentList(commentList));
         if (item.get().getOwnerId() == userId) addBookings(itemDto);
         return itemDto;
     }
@@ -74,9 +73,9 @@ public class ItemService {
         log.info("Создание предмета с id пользователя: {}", userId);
         if (userId > 0 && userStorage.findById(userId).isPresent()) {
             log.info("Создание предмета : {}, ", itemDto);
-            Item item = fromItemDto(itemDto);
+            Item item = ItemMapper.fromItemDto(itemDto);
             item.setOwnerId(userId);
-            return toItemDto(itemStorage.save(item), null);
+            return ItemMapper.toItemDto(itemStorage.save(item), null);
         } else throw new NotFoundException("Пользователь не найден");
     }
 
@@ -93,7 +92,7 @@ public class ItemService {
             item.setDescription(itemDto.getDescription());
         }
         List<Comment> commentList = commentRepository.findAllByItemId(item.getId());
-        return toItemDto(itemStorage.save(item), toCommentList(commentList));
+        return ItemMapper.toItemDto(itemStorage.save(item), toCommentList(commentList));
     }
 
     @Transactional
@@ -147,7 +146,7 @@ public class ItemService {
         List<ItemDto> itemDtoList = new ArrayList<>();
         for (Item item : items) {
             List<Comment> commentList = commentRepository.findAllByItemId(item.getId());
-            ItemDto itemDto = toItemDto(item, toCommentList(commentList));
+            ItemDto itemDto = ItemMapper.toItemDto(item, toCommentList(commentList));
             addBookings(itemDto);
             itemDtoList.add(itemDto);
         }
