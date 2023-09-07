@@ -26,6 +26,4 @@ public class Item {
     private int ownerId;
     @Column(name = "available")
     private Boolean available;
-    @Column(name = "request_id")
-    private int request;
 }

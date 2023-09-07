@@ -25,8 +25,7 @@ public class ItemMapper {
             itemDto.getName(),
             itemDto.getDescription(),
             0,
-            itemDto.getAvailable(),
-            0);
+            itemDto.getAvailable());
     }
 
     public List<ItemDto> itemDtoList(List<Item> items, List<CommentDtoResponse> comments) {
