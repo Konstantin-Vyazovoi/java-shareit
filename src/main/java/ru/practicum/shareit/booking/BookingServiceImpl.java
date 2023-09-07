@@ -63,7 +63,7 @@ public class BookingServiceImpl implements BookingService {
         Optional<Item> item = itemRepository.findById(booking.getItem().getId());
         if (item.isEmpty()) throw new NotFoundException("Предмет не найден");
         boolean isOwnerRequest = item.get().getOwnerId() == userId;
-        if (userId == booking.getBooker().getId())
+        if (userId.equals(booking.getBooker().getId()))
             throw new NotFoundException("Нет доступа к изменению статуса бронирования");
         if (!isOwnerRequest) throw new BadRequestException("Нет доступа к изменению статуса бронирования");
         if (booking.getStatus() != BookingStatus.WAITING) throw new BadRequestException("Не правльный статус");
