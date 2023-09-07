@@ -29,7 +29,8 @@ public class UserService {
 
     public UserDto getUser(int id) {
         Optional<User> optionalUser = userStorage.findById(id);
-        if (optionalUser.isEmpty()) throw new NotFoundException("Пользователь не найден!");
+        if (optionalUser.isEmpty())
+            throw new NotFoundException(String.format("Пользователь с id %s не найден!", id));
         return toUserDto(optionalUser.get());
     }
 
@@ -47,7 +48,8 @@ public class UserService {
     @Transactional
     public UserDto updateUser(int id, UserDto userDto) {
         Optional<User> optionalUser = userStorage.findById(id);
-        if (optionalUser.isEmpty()) throw new NotFoundException("Пользователь не найден!");
+        if (optionalUser.isEmpty())
+            throw new NotFoundException(String.format("Пользователь с id %s не найден!", id));
         User user = optionalUser.get();
         if (userDto.getEmail() != null) user.setEmail(userDto.getEmail());
         if (userDto.getName() != null) user.setName(userDto.getName());

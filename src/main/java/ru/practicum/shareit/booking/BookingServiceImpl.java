@@ -45,8 +45,12 @@ public class BookingServiceImpl implements BookingService {
         validateDate(bookingDto);
         User booker = validateUser(bookerId);
         Item item = validateItem(bookingDto);
-        if (item == null) throw new NotFoundException("Предмет не найден");
-        if (!item.getAvailable()) throw new BadRequestException("Предмет занят");
+        if (item == null)
+            throw new NotFoundException(
+                String.format("Предмет с id %s не найден", bookingDto.getItemId()));
+        if (!item.getAvailable())
+            throw new BadRequestException(
+                String.format("Предмет с id %s занят", bookingDto.getItemId()));
         if (item.getOwnerId() == bookerId) throw new NotFoundException("Нельзя взять в аренду свой предмет");
         Booking booking = toBooking(bookingDto);
         booking.setStatus(BookingStatus.WAITING);
@@ -61,7 +65,8 @@ public class BookingServiceImpl implements BookingService {
         validateUser(userId);
         Booking booking = validateBooking(bookingId);
         Optional<Item> item = itemRepository.findById(booking.getItem().getId());
-        if (item.isEmpty()) throw new NotFoundException("Предмет не найден");
+        if (item.isEmpty())
+            throw new NotFoundException(String.format("Предмет с id %s не найден", booking.getItem().getId()));
         boolean isOwnerRequest = item.get().getOwnerId() == userId;
         if (userId.equals(booking.getBooker().getId()))
             throw new NotFoundException("Нет доступа к изменению статуса бронирования");
@@ -82,7 +87,8 @@ public class BookingServiceImpl implements BookingService {
         Booking booking = validateBooking(bookingId);
         if (!Objects.equals(booking.getBooker().getId(), userId) &&
             booking.getItem().getOwnerId() != userId) {
-            throw new NotFoundException("Нет доступа к бронированию");
+            throw new NotFoundException(String
+                .format("Нет доступа к бронированию с id %s, у пользователя с id %s", bookingId, userId));
         }
         return toBookingResponseDto(booking);
     }
@@ -117,7 +123,7 @@ public class BookingServiceImpl implements BookingService {
                     .findAllByBookerIdAndStatusOrderByStartDateDesc(bookerId,
                         BookingStatus.valueOf(status)));
             default:
-                throw new BadRequestException("Unknown state: " + status);
+                throw new BadRequestException(String.format("Unknown state: %s", status));
         }
     }
 
@@ -151,7 +157,7 @@ public class BookingServiceImpl implements BookingService {
                     .findAllByItemOwnerIdAndStatusOrderByStartDateDesc(userId,
                         BookingStatus.valueOf(status)));
             default:
-                throw new BadRequestException("Unknown state: " + status);
+                throw new BadRequestException(String.format("Unknown state: %s", status));
         }
     }
 
@@ -162,7 +168,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     private User validateUser(Integer id) {
-        if (id == null) throw new ValidateException("Не правильный id");
+        if (id == null) throw new ValidateException(String.format("Не правильный id %s", id));
         Optional<User> user = userRepository.findById(id);
         if (user.isEmpty()) throw new NotFoundException("Пользователь не найден");
         return user.get();
@@ -170,14 +176,14 @@ public class BookingServiceImpl implements BookingService {
 
     private Item validateItem(BookingDto bookingDto) {
         Optional<Item> item = itemRepository.findById(bookingDto.getItemId());
-        if (item.isEmpty()) throw new NotFoundException("Предмет не найден");
+        if (item.isEmpty()) throw new NotFoundException(String.format("Предмет с id %s не найден", bookingDto.getItemId()));
         if (!item.get().getAvailable()) throw new BadRequestException("Предмет занят");
         return item.get();
     }
 
     private Booking validateBooking(Integer bookingId) {
         Optional<Booking> booking = bookingRepository.findById(bookingId);
-        if (booking.isEmpty()) throw new NotFoundException("Бронирование не найдено");
+        if (booking.isEmpty()) throw new NotFoundException(String.format("Бронирование с id %s не найдено", bookingId));
         return booking.get();
     }
 

@@ -60,7 +60,9 @@ public class ItemService {
     public ItemDto getItem(Integer itemId, Integer userId) {
         log.info("Получение предмета с id: {}", itemId);
         Optional<Item> item = itemStorage.findById(itemId);
-        if (item.isEmpty()) throw new NotFoundException("Предмет не найден");
+        if (item.isEmpty())
+            throw new NotFoundException(
+                String.format("Предмет с id %s не найден", itemId));
         log.info("Предмет получен : {}", item);
         List<Comment> commentList = commentRepository.findAllByItemId(item.get().getId());
         ItemDto itemDto = ItemMapper.toItemDto(item.get(), toCommentList(commentList));
@@ -76,16 +78,20 @@ public class ItemService {
             Item item = ItemMapper.fromItemDto(itemDto);
             item.setOwnerId(userId);
             return ItemMapper.toItemDto(itemStorage.save(item), null);
-        } else throw new NotFoundException("Пользователь не найден");
+        } else throw new NotFoundException(String.format("Пользователь с id %s не найден", userId));
     }
 
     @Transactional
     public ItemDto updateItem(Integer id, ItemDto itemDto, Integer owner) {
         log.info("Обновление предмета с id пользователя {}, id предмета {}", owner, id);
         Optional<Item> optionalItem = itemStorage.findById(id);
-        if (optionalItem.isEmpty()) throw new NotFoundException("Предмет не найден");
+        if (optionalItem.isEmpty())
+            throw new NotFoundException(
+                String.format("Предмет с id %s не найден", id));
         Item item = optionalItem.get();
-        if (optionalItem.get().getOwnerId() != owner) throw new NotFoundException("Пользователь не найден");
+        if (optionalItem.get().getOwnerId() != owner)
+            throw new NotFoundException(
+                String.format("Пользователь с id %s не найден", owner));
         if (itemDto.getAvailable() != null) item.setAvailable(itemDto.getAvailable());
         if (itemDto.getName() != null && !itemDto.getName().isBlank()) item.setName(itemDto.getName());
         if (itemDto.getDescription() != null && !itemDto.getDescription().isBlank()) {
@@ -110,7 +116,9 @@ public class ItemService {
                 itemId,
                 LocalDateTime.now(),
                 BookingStatus.APPROVED);
-        if (bookings.isEmpty()) throw new BadRequestException("Пользователь не может оставить комментарий");
+        if (bookings.isEmpty())
+            throw new BadRequestException(
+                String.format("Пользователь с id %s не может оставить комментарий", authorId));
         Item item = validateItem(itemId);
         User author = validateUser(authorId);
         Comment comment = CommentMapper.toComment(commentDto, item, author);
@@ -129,16 +137,18 @@ public class ItemService {
     }
 
     private User validateUser(Integer id) {
-        if (id == null) throw new ValidateException("Не правильный id");
+        if (id == null) throw new ValidateException(String.format("Не правильный id: %s", id));
         Optional<User> user = userStorage.findById(id);
-        if (user.isEmpty()) throw new NotFoundException("Пользователь не найден");
+        if (user.isEmpty()) throw new NotFoundException(String.format("Пользователь с id %s не найден", id));
         return user.get();
     }
 
     private Item validateItem(Integer itemId) {
         Optional<Item> item = itemStorage.findById(itemId);
-        if (item.isEmpty()) throw new NotFoundException("Предмет не найден");
-        if (!item.get().getAvailable()) throw new BadRequestException("Предмет занят");
+        if (item.isEmpty())
+            throw new NotFoundException(String.format("Предмет с id %s не найден", itemId));
+        if (!item.get().getAvailable())
+            throw new BadRequestException(String.format("Предмет с id %s занят", itemId));
         return item.get();
     }
 
