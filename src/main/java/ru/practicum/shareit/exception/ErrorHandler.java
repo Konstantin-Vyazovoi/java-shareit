@@ -7,13 +7,14 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import ru.practicum.shareit.booking.BookingController;
 import ru.practicum.shareit.item.ItemController;
 import ru.practicum.shareit.user.UserController;
 
 import java.util.List;
 
 @Slf4j
-@RestControllerAdvice(assignableTypes = {UserController.class, ItemController.class})
+@RestControllerAdvice(assignableTypes = {UserController.class, ItemController.class, BookingController.class})
 public class ErrorHandler {
 
     @ExceptionHandler
@@ -53,4 +54,12 @@ public class ErrorHandler {
         log.error("Получен статус 500 Internal server error: {}", e.getMessage(), e);
         return new ErrorResponse(e.getMessage());
     }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleThrowableException(final BadRequestException e) {
+        log.error("Получен статус 400 Bad request: {}", e.getMessage(), e);
+        return new ErrorResponse(e.getMessage());
+    }
+
 }
