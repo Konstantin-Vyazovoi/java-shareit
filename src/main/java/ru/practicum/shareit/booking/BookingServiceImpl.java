@@ -2,6 +2,8 @@ package ru.practicum.shareit.booking;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.BookingResponseDto;
@@ -94,68 +96,84 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public List<BookingResponseDto> getBookings(Integer bookerId, String status) {
+    public List<BookingResponseDto> getBookings(Integer bookerId, String status, Integer from, Integer size) {
+        if (from < 0 || size < 0)
+            throw new BadRequestException(
+                String.format("Не правильные значения from = %s, size = %s" , from, size));
         validateUser(bookerId);
         LocalDateTime dateNow = LocalDateTime.now();
+        Pageable pageable = PageRequest.of(from / size, size);
         switch (status.toUpperCase()) {
             case "ALL":
-                List<Booking> bookingList = bookingRepository.findAllByBookerIdOrderByStartDateDesc(bookerId);
+                List<Booking> bookingList = bookingRepository.findAllByBookerIdOrderByStartDateDesc(bookerId, pageable);
                 return toListBookingResp(bookingList);
             case "CURRENT":
                 return toListBookingResp(bookingRepository
                     .findAllByBookerIdAndStartDateBeforeAndEndDateAfterOrderByStartDateDesc(
                         bookerId,
-                        LocalDateTime.now(),
-                        LocalDateTime.now()));
+                        dateNow,
+                        dateNow,
+                        pageable));
             case "FUTURE":
                 return toListBookingResp(bookingRepository
                     .findAllByBookerIdAndStartDateAfterOrderByStartDateDesc(
                         bookerId,
-                        LocalDateTime.now()));
+                        dateNow,
+                        pageable));
             case "PAST":
                 return toListBookingResp(bookingRepository
                     .findAllByBookerIdAndEndDateBeforeOrderByStartDateDesc(
                         bookerId,
-                        LocalDateTime.now()));
+                        dateNow,
+                        pageable));
             case "WAITING":
             case "REJECTED":
                 return toListBookingResp(bookingRepository
                     .findAllByBookerIdAndStatusOrderByStartDateDesc(bookerId,
-                        BookingStatus.valueOf(status)));
+                        BookingStatus.valueOf(status),
+                        pageable));
             default:
                 throw new BadRequestException(String.format("Unknown state: %s", status));
         }
     }
 
     @Override
-    public List<BookingResponseDto> getBookingsByOwner(Integer userId, String status) {
+    public List<BookingResponseDto> getBookingsByOwner(Integer userId, String status, Integer from, Integer size) {
+        if (from < 0 || size < 0)
+            throw new BadRequestException(
+                String.format("Не правильные значения from = %s, size = %s" , from, size));
         validateUser(userId);
         LocalDateTime dateNow = LocalDateTime.now();
+        Pageable pageable = PageRequest.of(from / size, size);
         switch (status.toUpperCase()) {
             case "ALL":
                 return toListBookingResp(bookingRepository
-                    .findAllByItemOwnerIdOrderByStartDateDesc(userId));
+                    .findAllByItemOwnerIdOrderByStartDateDesc(userId, pageable));
             case "CURRENT":
                 return toListBookingResp(bookingRepository
                     .findAllByItemOwnerIdAndStartDateBeforeAndEndDateAfterOrderByStartDateDesc(
                         userId,
-                        LocalDateTime.now(),
-                        LocalDateTime.now()));
+                        dateNow,
+                        dateNow,
+                        pageable));
             case "FUTURE":
                 return toListBookingResp(bookingRepository
                     .findAllByItemOwnerIdAndStartDateAfterOrderByStartDateDesc(
                         userId,
-                        LocalDateTime.now()));
+                        dateNow,
+                        pageable));
             case "PAST":
                 return toListBookingResp(bookingRepository
                     .findAllByItemOwnerIdAndEndDateBeforeOrderByStartDateDesc(
                         userId,
-                        LocalDateTime.now()));
+                        dateNow,
+                        pageable));
             case "WAITING":
             case "REJECTED":
                 return toListBookingResp(bookingRepository
                     .findAllByItemOwnerIdAndStatusOrderByStartDateDesc(userId,
-                        BookingStatus.valueOf(status)));
+                        BookingStatus.valueOf(status),
+                        pageable));
             default:
                 throw new BadRequestException(String.format("Unknown state: %s", status));
         }

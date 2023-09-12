@@ -8,6 +8,7 @@ import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.BookingResponseDto;
 import ru.practicum.shareit.interfaces.CreateGroup;
 
+import javax.validation.constraints.Min;
 import java.util.List;
 
 @Slf4j
@@ -47,16 +48,20 @@ public class BookingController {
 
     @GetMapping
     public List<BookingResponseDto> getBookerBookingList(@RequestHeader(headerUserId) Integer userId,
-                                                         @RequestParam(defaultValue = "ALL") String state) {
+                                                         @RequestParam(defaultValue = "ALL") String state,
+                                                         @RequestParam(defaultValue = "0") Integer from,
+                                                         @RequestParam(defaultValue = "10") Integer size) {
         log.info("Получен запрос получения от пользователя с id: {}, и статусом: {}", userId, state);
-        return bookingService.getBookings(userId, state);
+        return bookingService.getBookings(userId, state, from, size);
     }
 
     @GetMapping("/owner")
     public List<BookingResponseDto> getOwnerBookingList(@RequestHeader(headerUserId) Integer userId,
-                                                        @RequestParam(defaultValue = "ALL") String state) {
+                                                        @RequestParam(defaultValue = "ALL") String state,
+                                                        @RequestParam(defaultValue = "0") Integer from,
+                                                        @RequestParam(defaultValue = "10") Integer size) {
         log.info("Получен запрос получения от владельца с id: {}, и статусом: {}", userId, state);
-        return bookingService.getBookingsByOwner(userId, state);
+        return bookingService.getBookingsByOwner(userId, state, from, size);
     }
 
 }
