@@ -13,8 +13,8 @@ public interface BookingService {
 
     BookingResponseDto getById(Integer userId, Integer bookingId);
 
-    List<BookingResponseDto> getBookings(Integer bookerId, String approved);
+    List<BookingResponseDto> getBookings(Integer bookerId, String status);
 
-    List<BookingResponseDto> getBookingsByOwner(Integer ownerId, String approved);
+    List<BookingResponseDto> getBookingsByOwner(Integer ownerId, String status);
 
 }
