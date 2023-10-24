@@ -17,7 +17,19 @@ public class ItemMapper {
             item.getAvailable(),
             null,
             null,
-            comments);
+            comments,
+            item.getRequestId());
+    }
+
+    public ItemDto toItemDtoWithRequest(Item item) {
+        ItemDto itemDto = ItemDto.builder()
+            .id(item.getId())
+            .available(item.getAvailable())
+            .requestId(item.getRequestId())
+            .description(item.getDescription())
+            .name(item.getName())
+            .build();
+        return itemDto;
     }
 
     public Item fromItemDto(ItemDto itemDto) {
@@ -25,7 +37,8 @@ public class ItemMapper {
             itemDto.getName(),
             itemDto.getDescription(),
             0,
-            itemDto.getAvailable());
+            itemDto.getAvailable(),
+            itemDto.getRequestId());
     }
 
     public List<ItemDto> itemDtoList(List<Item> items, List<CommentDtoResponse> comments) {
