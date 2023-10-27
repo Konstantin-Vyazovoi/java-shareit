@@ -99,7 +99,7 @@ public class BookingServiceImpl implements BookingService {
     public List<BookingResponseDto> getBookings(Integer bookerId, String status, Integer from, Integer size) {
         if (from < 0 || size < 0)
             throw new BadRequestException(
-                String.format("Не правильные значения from = %s, size = %s" , from, size));
+                String.format("Не правильные значения from = %s, size = %s", from, size));
         validateUser(bookerId);
         LocalDateTime dateNow = LocalDateTime.now();
         Pageable pageable = PageRequest.of(from / size, size);
@@ -141,7 +141,7 @@ public class BookingServiceImpl implements BookingService {
     public List<BookingResponseDto> getBookingsByOwner(Integer userId, String status, Integer from, Integer size) {
         if (from < 0 || size < 0)
             throw new BadRequestException(
-                String.format("Не правильные значения from = %s, size = %s" , from, size));
+                String.format("Не правильные значения from = %s, size = %s", from, size));
         validateUser(userId);
         LocalDateTime dateNow = LocalDateTime.now();
         Pageable pageable = PageRequest.of(from / size, size);
