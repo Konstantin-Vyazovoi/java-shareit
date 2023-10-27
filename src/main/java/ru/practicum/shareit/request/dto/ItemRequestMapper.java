@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 public class ItemRequestMapper {
 
     public static ItemRequest toItemRequest(ItemRequestDto itemRequestDto) {
+
         return ItemRequest.builder()
             .description(itemRequestDto.getDescription())
             .created(LocalDateTime.now())
