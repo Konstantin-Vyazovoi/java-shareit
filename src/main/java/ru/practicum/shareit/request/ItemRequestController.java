@@ -50,4 +50,5 @@ public class ItemRequestController {
         log.info("Получен запрос получения списка запросов от пользователя с id: {}", userId);
         return requestService.getAllRequests(userId, from, size);
     }
+
 }
