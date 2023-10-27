@@ -5,7 +5,6 @@ import lombok.SneakyThrows;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -26,7 +25,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -70,11 +69,11 @@ public class ItemControllerTest {
     public void createItemTest() {
         when(itemService.createItem(itemDto, 1)).thenReturn(itemDto);
         mockMvc.perform(post("/items")
-            .content(objectMapper.writeValueAsString(itemDto))
-            .header("X-Sharer-User-Id", 1)
-            .characterEncoding(StandardCharsets.UTF_8)
-            .contentType(MediaType.APPLICATION_JSON)
-            .accept(MediaType.APPLICATION_JSON))
+                .content(objectMapper.writeValueAsString(itemDto))
+                .header("X-Sharer-User-Id", 1)
+                .characterEncoding(StandardCharsets.UTF_8)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.id").value(1))
             .andExpect(jsonPath("$.name").value("Стул"))
@@ -167,5 +166,5 @@ public class ItemControllerTest {
             .andExpect(jsonPath("$.text").value("Some text"))
             .andExpect(jsonPath("$.created").isNotEmpty());
     }
-    
+
 }

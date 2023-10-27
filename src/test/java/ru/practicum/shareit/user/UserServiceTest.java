@@ -55,7 +55,7 @@ public class UserServiceTest {
 
     @Test
     void updateValidUserShouldReturnUpdatedUserDto() {
-        userId =1;
+        userId = 1;
         UserDto updatedUserDto = new UserDto(userId, "Updated", "updated@email.com");
         when(userRepository.save(Mockito.any())).thenReturn(user);
         when(userRepository.findById(userId)).thenReturn(Optional.of(user));
@@ -68,7 +68,7 @@ public class UserServiceTest {
 
     @Test
     void updateUserNotFoundThrowsNotFoundException() {
-        userId =1;
+        userId = 1;
         UserDto updatedUserDto = new UserDto(userId, "Updated", "updated@email.com");
 
         when(userRepository.findById(userId)).thenReturn(Optional.empty());
@@ -78,7 +78,7 @@ public class UserServiceTest {
 
     @Test
     void getUserByIdShouldReturnUserDto() {
-        userId =1;
+        userId = 1;
 
         when(userRepository.findById(userId)).thenReturn(Optional.of(user));
 
@@ -90,7 +90,7 @@ public class UserServiceTest {
 
     @Test
     void getUserByIdWhenUserNotFoundThrowsNotFoundException() {
-        userId =1;
+        userId = 1;
 
         when(userRepository.findById(userId)).thenReturn(Optional.empty());
 

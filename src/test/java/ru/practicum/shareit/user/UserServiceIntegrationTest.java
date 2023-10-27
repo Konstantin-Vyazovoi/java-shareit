@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import ru.practicum.shareit.user.dto.UserDto;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,7 +40,7 @@ class UserServiceIntegrationTest {
         UserDto user = userService.createUser(userDto);
         assertNotNull(user.getId());
 
-        UserDto updateUser = new UserDto(1,"update", "update@user.com");
+        UserDto updateUser = new UserDto(1, "update", "update@user.com");
         Integer userId = 1;
 
         UserDto actualUser = userService.updateUser(userId, updateUser);

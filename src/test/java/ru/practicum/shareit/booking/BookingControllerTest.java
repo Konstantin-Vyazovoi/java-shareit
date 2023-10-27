@@ -45,7 +45,7 @@ public class BookingControllerTest {
 
     @BeforeEach
     public void beforeEach() {
-        booker = new  User(1, "User", "user@email.com");
+        booker = new User(1, "User", "user@email.com");
         item = new Item(1, "Стул", "Просто стул", 1, true, null);
         start = LocalDateTime.now().plusMinutes(1);
         end = start.plusDays(1);

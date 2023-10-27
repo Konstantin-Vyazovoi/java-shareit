@@ -22,7 +22,7 @@ import java.util.Optional;
 
 @Service
 @Slf4j
-public class ItemRequestServiceImpl implements ItemRequestService{
+public class ItemRequestServiceImpl implements ItemRequestService {
 
     private final ItemRequestRepository itemRequestRepository;
     private final ItemRepository itemRepository;
@@ -70,7 +70,7 @@ public class ItemRequestServiceImpl implements ItemRequestService{
         log.info("Получение списка всех запросов от пользователя с id: {}", userId);
         if (from.intValue() < 0 || size.intValue() < 0)
             throw new BadRequestException(
-                String.format("Не правильные значения from = %s, size = %s" , from, size));
+                String.format("Не правильные значения from = %s, size = %s", from, size));
         validateUser(userId);
         Pageable pageable = PageRequest.of(from / size, size);
         List<ItemRequest> itemRequestList = itemRequestRepository
@@ -95,7 +95,7 @@ public class ItemRequestServiceImpl implements ItemRequestService{
         return itemRequest.get();
     }
 
-    private void addItems (ItemResponseDto responseDto) {
+    private void addItems(ItemResponseDto responseDto) {
         List<Item> items = itemRepository.findAllByRequestId(responseDto.getId());
         responseDto.setItems(ItemMapper.itemDtoList(items, null));
     }
