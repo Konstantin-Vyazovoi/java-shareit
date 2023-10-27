@@ -46,7 +46,7 @@ public class BookingControllerTest {
     @BeforeEach
     public void beforeEach() {
         booker = new  User(1, "User", "user@email.com");
-        item = new Item(1, "Стул", "Просто стул", 1, true);
+        item = new Item(1, "Стул", "Просто стул", 1, true, null);
         start = LocalDateTime.now().plusMinutes(1);
         end = start.plusDays(1);
         bookingDto = new BookingDto(start, end, 1);
@@ -123,7 +123,7 @@ public class BookingControllerTest {
     @SneakyThrows
     @Test
     public void getBookerBookingListTest() {
-        when(bookingService.getBookings(1, "ALL")).thenReturn(List.of(responseDto));
+        when(bookingService.getBookings(1, "ALL", 1, 2)).thenReturn(List.of(responseDto));
 
         mockMvc.perform(get("/bookings")
                 .header("X-Sharer-User-Id", booker.getId()))
@@ -141,7 +141,7 @@ public class BookingControllerTest {
     @SneakyThrows
     @Test
     public void getOwnerBookingListTest() {
-        when(bookingService.getBookingsByOwner(1, "ALL")).thenReturn(List.of(responseDto));
+        when(bookingService.getBookingsByOwner(1, "ALL", 1, 2)).thenReturn(List.of(responseDto));
 
         mockMvc.perform(get("/bookings/owner")
                 .header("X-Sharer-User-Id", booker.getId()))

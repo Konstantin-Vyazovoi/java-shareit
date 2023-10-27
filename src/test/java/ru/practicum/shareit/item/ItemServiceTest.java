@@ -51,7 +51,8 @@ public class ItemServiceTest {
             true,
             null,
             null,
-            new ArrayList<>());
+            new ArrayList<>(),
+            null);
         userDto = new UserDto(2, "User", "user@email.com");
     }
 

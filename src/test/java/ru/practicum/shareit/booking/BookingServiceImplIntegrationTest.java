@@ -52,7 +52,8 @@ public class BookingServiceImplIntegrationTest {
             true,
             null,
             null,
-            new ArrayList<>());
+            new ArrayList<>(),
+            null);
         start = LocalDateTime.now().plusMinutes(1);
         end = start.plusDays(1);
         bookingDto = new BookingDto(start, end, 1);
@@ -94,22 +95,22 @@ public class BookingServiceImplIntegrationTest {
     public void getUserBookingsTest() {
         BookingResponseDto responseDto = bookingService.createBooking(bookingDto, 2);
         Assertions.assertNotNull(responseDto);
-        List<BookingResponseDto> responseDtoList = bookingService.getBookings(2, "ALL");
+        List<BookingResponseDto> responseDtoList = bookingService.getBookings(2, "ALL", 1, 2);
         Assertions.assertNotNull(responseDtoList);
         assertEquals(responseDtoList.size(), 1);
-        responseDtoList = bookingService.getBookings(2, "FUTURE");
+        responseDtoList = bookingService.getBookings(2, "FUTURE", 1, 2);
         Assertions.assertNotNull(responseDtoList);
         assertEquals(responseDtoList.size(), 1);
-        responseDtoList = bookingService.getBookings(2, "REJECTED");
+        responseDtoList = bookingService.getBookings(2, "REJECTED", 1, 2);
         Assertions.assertNotNull(responseDtoList);
         assertEquals(responseDtoList.size(), 0);
-        responseDtoList = bookingService.getBookings(2, "CURRENT");
+        responseDtoList = bookingService.getBookings(2, "CURRENT", 1, 2);
         Assertions.assertNotNull(responseDtoList);
         assertEquals(responseDtoList.size(), 0);
-        responseDtoList = bookingService.getBookings(2, "PAST");
+        responseDtoList = bookingService.getBookings(2, "PAST", 1, 2);
         Assertions.assertNotNull(responseDtoList);
         assertEquals(responseDtoList.size(), 0);
-        responseDtoList = bookingService.getBookings(2, "WAITING");
+        responseDtoList = bookingService.getBookings(2, "WAITING", 1, 2);
         Assertions.assertNotNull(responseDtoList);
         assertEquals(responseDtoList.size(), 1);
     }
@@ -118,22 +119,22 @@ public class BookingServiceImplIntegrationTest {
     public void getOwnerBookingsTest() {
         BookingResponseDto responseDto = bookingService.createBooking(bookingDto, 2);
         Assertions.assertNotNull(responseDto);
-        List<BookingResponseDto> responseDtoList = bookingService.getBookingsByOwner(1, "ALL");
+        List<BookingResponseDto> responseDtoList = bookingService.getBookingsByOwner(1, "ALL", 1, 2);
         Assertions.assertNotNull(responseDtoList);
         assertEquals(responseDtoList.size(), 1);
-        responseDtoList = bookingService.getBookingsByOwner(1, "FUTURE");
+        responseDtoList = bookingService.getBookingsByOwner(1, "FUTURE", 1, 2);
         Assertions.assertNotNull(responseDtoList);
         assertEquals(responseDtoList.size(), 1);
-        responseDtoList = bookingService.getBookingsByOwner(1, "REJECTED");
+        responseDtoList = bookingService.getBookingsByOwner(1, "REJECTED", 1, 2);
         Assertions.assertNotNull(responseDtoList);
         assertEquals(responseDtoList.size(), 0);
-        responseDtoList = bookingService.getBookingsByOwner(1, "CURRENT");
+        responseDtoList = bookingService.getBookingsByOwner(1, "CURRENT", 1, 2);
         Assertions.assertNotNull(responseDtoList);
         assertEquals(responseDtoList.size(), 0);
-        responseDtoList = bookingService.getBookingsByOwner(1, "PAST");
+        responseDtoList = bookingService.getBookingsByOwner(1, "PAST", 1, 2);
         Assertions.assertNotNull(responseDtoList);
         assertEquals(responseDtoList.size(), 0);
-        responseDtoList = bookingService.getBookingsByOwner(1, "WAITING");
+        responseDtoList = bookingService.getBookingsByOwner(1, "WAITING", 1, 2);
         Assertions.assertNotNull(responseDtoList);
         assertEquals(responseDtoList.size(), 1);
     }

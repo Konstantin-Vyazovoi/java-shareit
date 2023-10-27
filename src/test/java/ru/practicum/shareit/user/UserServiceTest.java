@@ -40,10 +40,7 @@ public class UserServiceTest {
         user.setName("John");
         user.setEmail("john@email.com");
 
-        userDto = new UserDto();
-        userDto.setId(1);
-        userDto.setName("John");
-        userDto.setEmail("john@email.com");
+        userDto = new UserDto(1, "John", "john@email.com");
     }
 
     @Test
@@ -59,10 +56,7 @@ public class UserServiceTest {
     @Test
     void updateValidUserShouldReturnUpdatedUserDto() {
         userId =1;
-        UserDto updatedUserDto = new UserDto();
-        updatedUserDto.setId(userId);
-        updatedUserDto.setName("Updated");
-        updatedUserDto.setEmail("updated@email.com");
+        UserDto updatedUserDto = new UserDto(userId, "Updated", "updated@email.com");
         when(userRepository.save(Mockito.any())).thenReturn(user);
         when(userRepository.findById(userId)).thenReturn(Optional.of(user));
 
@@ -75,9 +69,7 @@ public class UserServiceTest {
     @Test
     void updateUserNotFoundThrowsNotFoundException() {
         userId =1;
-        UserDto updatedUserDto = new UserDto();
-        updatedUserDto.setName("Updated");
-        updatedUserDto.setEmail("updated@email.com");
+        UserDto updatedUserDto = new UserDto(userId, "Updated", "updated@email.com");
 
         when(userRepository.findById(userId)).thenReturn(Optional.empty());
 

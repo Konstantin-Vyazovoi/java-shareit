@@ -26,6 +26,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -56,7 +57,8 @@ public class ItemControllerTest {
             true,
             lastBooking,
             nextBooking,
-            new ArrayList<>());
+            new ArrayList<>(),
+            null);
         start = LocalDateTime.now().plusMinutes(1);
         end = start.plusDays(1);
         lastBooking = new BookingItemDto(1, 1);
@@ -66,7 +68,7 @@ public class ItemControllerTest {
     @SneakyThrows
     @Test
     public void createItemTest() {
-        Mockito.when(itemService.createItem(itemDto, 1)).thenReturn(itemDto);
+        when(itemService.createItem(itemDto, 1)).thenReturn(itemDto);
         mockMvc.perform(post("/items")
             .content(objectMapper.writeValueAsString(itemDto))
             .header("X-Sharer-User-Id", 1)
@@ -84,7 +86,7 @@ public class ItemControllerTest {
     @Test
     public void updateItemTest() {
         itemDto.setAvailable(false);
-        Mockito.when(itemService.updateItem(1, itemDto, 1)).thenReturn(itemDto);
+        when(itemService.updateItem(1, itemDto, 1)).thenReturn(itemDto);
         mockMvc.perform(patch("/items/{itemId}", 1)
                 .content(objectMapper.writeValueAsString(itemDto))
                 .header("X-Sharer-User-Id", 1)
@@ -101,7 +103,7 @@ public class ItemControllerTest {
     @SneakyThrows
     @Test
     public void getItemByIdTest() {
-        Mockito.when(itemService.getItem(1, 1)).thenReturn(itemDto);
+        when(itemService.getItem(1, 1)).thenReturn(itemDto);
         mockMvc.perform(get("/items/{itemId}", 1)
                 .header("X-Sharer-User-Id", 1))
             .andExpect(status().isOk())
@@ -115,7 +117,7 @@ public class ItemControllerTest {
     @Test
     public void getItemByOwnerIdTest() {
         List<ItemDto> itemDtoList = List.of(itemDto);
-        Mockito.when(itemService.getItems(1)).thenReturn(itemDtoList);
+        when(itemService.getItems(1)).thenReturn(itemDtoList);
         mockMvc.perform(get("/items")
                 .header("X-Sharer-User-Id", 1))
             .andExpect(status().isOk())
@@ -130,7 +132,7 @@ public class ItemControllerTest {
     @Test
     public void getItemResearchTest() {
         List<ItemDto> itemDtoList = List.of(itemDto);
-        Mockito.when(itemService.searchItems("Ст")).thenReturn(itemDtoList);
+        when(itemService.searchItems("Ст")).thenReturn(itemDtoList);
         mockMvc.perform(get("/items/search?text=Ст")
                 .header("X-Sharer-User-Id", 1))
             .andExpect(status().isOk())
@@ -152,7 +154,7 @@ public class ItemControllerTest {
         comment.setId(1);
         CommentDtoResponse commentDtoResponse = CommentMapper
             .toCommentDtoResponse(comment);
-        Mockito.when(itemService.createComment(2, 1, commentDto)).thenReturn(commentDtoResponse);
+        when(itemService.createComment(2, 1, commentDto)).thenReturn(commentDtoResponse);
         mockMvc.perform(post("/items/{itemId}/comment", 1)
                 .content(objectMapper.writeValueAsString(commentDto))
                 .header("X-Sharer-User-Id", 2)
