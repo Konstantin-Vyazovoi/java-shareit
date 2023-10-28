@@ -74,7 +74,7 @@ public class ItemRequestServiceImpl implements ItemRequestService {
         validateUser(userId);
         Pageable pageable = PageRequest.of(from / size, size);
         List<ItemRequest> itemRequestList = itemRequestRepository
-            .findAllByRequestorIdIsNotOrderByCreated(userId, pageable)
+            .findAllByRequestorIdOrderByCreated(userId, pageable)
             .toList();
         List<ItemResponseDto> itemResponseDtos = ItemRequestMapper.toResponseList(itemRequestList);
         itemResponseDtos.forEach(this::addItems);

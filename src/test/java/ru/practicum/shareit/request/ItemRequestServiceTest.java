@@ -12,8 +12,7 @@ import ru.practicum.shareit.user.dto.UserDto;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
@@ -51,8 +50,10 @@ public class ItemRequestServiceTest {
     @Test
     public void getAllRequestsTest() {
         itemRequestService.createRequest(itemRequestDto, 1);
-        List<ItemResponseDto> responseDtoList = itemRequestService.getAllRequests(1, 0, 1);
-        assertNotNull(responseDtoList);
+        responseDto = itemRequestService.getRequestById(1, 1);
+        assertEquals(responseDto.getDescription(), itemRequestDto.getDescription());
+        List<ItemResponseDto> responseDtoList = itemRequestService.getAllRequests(1, 0, 2);
+        assertFalse(responseDtoList.isEmpty());
         assertEquals(responseDtoList.get(0).getDescription(), itemRequestDto.getDescription());
     }
 
