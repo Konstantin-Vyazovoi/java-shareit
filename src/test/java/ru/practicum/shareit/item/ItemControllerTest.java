@@ -131,8 +131,8 @@ public class ItemControllerTest {
     @Test
     public void getItemResearchTest() {
         List<ItemDto> itemDtoList = List.of(itemDto);
-        when(itemService.searchItems("Ст")).thenReturn(itemDtoList);
-        mockMvc.perform(get("/items/search?text=Ст")
+        when(itemService.searchItems("It")).thenReturn(itemDtoList);
+        mockMvc.perform(get("/items/search?text=It")
                 .header("X-Sharer-User-Id", 1))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$", Matchers.hasSize(1)))
