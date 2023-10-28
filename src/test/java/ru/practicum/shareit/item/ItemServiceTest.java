@@ -43,8 +43,8 @@ public class ItemServiceTest {
     @BeforeEach
     public void beforeEach() {
         itemDto = new ItemDto(1,
-            "Стул",
-            "Просто стул",
+            "ItemName",
+            "Description",
             true,
             null,
             null,
@@ -107,7 +107,7 @@ public class ItemServiceTest {
         UserDto user = userService.createUser(userDto);
         assertNotNull(user.getId());
         itemService.createItem(itemDto, user.getId());
-        List<ItemDto> items = itemService.searchItems("Ст");
+        List<ItemDto> items = itemService.searchItems("It");
         assertEquals(items.size(), 1);
         assertEquals(itemDto.getName(), items.get(0).getName());
         assertEquals(itemDto.getDescription(), items.get(0).getDescription());

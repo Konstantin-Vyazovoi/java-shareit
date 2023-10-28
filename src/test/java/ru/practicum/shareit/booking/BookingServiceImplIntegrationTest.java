@@ -45,7 +45,7 @@ public class BookingServiceImplIntegrationTest {
         userDto = new UserDto(1, "User", "user@email.com");
         userDto2 = new UserDto(2, "User2", "user2@email.com");
         itemDto = new ItemDto(1,
-            "Стул",
+            "ItemName",
             "Description",
             true,
             null,

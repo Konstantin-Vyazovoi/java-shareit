@@ -51,8 +51,8 @@ public class ItemControllerTest {
     @BeforeEach
     public void beforeEach() {
         itemDto = new ItemDto(1,
-            "Стул",
-            "Просто стул",
+            "ItemName",
+            "Description",
             true,
             lastBooking,
             nextBooking,
@@ -76,8 +76,8 @@ public class ItemControllerTest {
                 .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.id").value(1))
-            .andExpect(jsonPath("$.name").value("Стул"))
-            .andExpect(jsonPath("$.description").value("Просто стул"))
+            .andExpect(jsonPath("$.name").value("ItemName"))
+            .andExpect(jsonPath("$.description").value("Description"))
             .andExpect(jsonPath("$.available").value(true));
     }
 
@@ -94,8 +94,8 @@ public class ItemControllerTest {
                 .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.id").value(1))
-            .andExpect(jsonPath("$.name").value("Стул"))
-            .andExpect(jsonPath("$.description").value("Просто стул"))
+            .andExpect(jsonPath("$.name").value("ItemName"))
+            .andExpect(jsonPath("$.description").value("Description"))
             .andExpect(jsonPath("$.available").value(false));
     }
 
@@ -107,8 +107,8 @@ public class ItemControllerTest {
                 .header("X-Sharer-User-Id", 1))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.id").value(1))
-            .andExpect(jsonPath("$.name").value("Стул"))
-            .andExpect(jsonPath("$.description").value("Просто стул"))
+            .andExpect(jsonPath("$.name").value("ItemName"))
+            .andExpect(jsonPath("$.description").value("Description"))
             .andExpect(jsonPath("$.available").value(true));
     }
 
@@ -122,8 +122,8 @@ public class ItemControllerTest {
             .andExpect(status().isOk())
             .andExpect(jsonPath("$", Matchers.hasSize(1)))
             .andExpect(jsonPath("$[0].id").value(1))
-            .andExpect(jsonPath("$[0].name").value("Стул"))
-            .andExpect(jsonPath("$[0].description").value("Просто стул"))
+            .andExpect(jsonPath("$[0].name").value("ItemName"))
+            .andExpect(jsonPath("$[0].description").value("Description"))
             .andExpect(jsonPath("$[0].available").value(true));
     }
 
@@ -137,8 +137,8 @@ public class ItemControllerTest {
             .andExpect(status().isOk())
             .andExpect(jsonPath("$", Matchers.hasSize(1)))
             .andExpect(jsonPath("$[0].id").value(1))
-            .andExpect(jsonPath("$[0].name").value("Стул"))
-            .andExpect(jsonPath("$[0].description").value("Просто стул"))
+            .andExpect(jsonPath("$[0].name").value("ItemName"))
+            .andExpect(jsonPath("$[0].description").value("Description"))
             .andExpect(jsonPath("$[0].available").value(true));
     }
 
