@@ -126,6 +126,9 @@ public class BookingControllerTest {
         when(bookingService.getBookings(1, "ALL", 1, 2)).thenReturn(List.of(responseDto));
 
         mockMvc.perform(get("/bookings")
+                .param("state", "ALL")
+                .param("from", "1")
+                .param("size", "2")
                 .header("X-Sharer-User-Id", booker.getId()))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$[0].id").value(1))
@@ -144,6 +147,9 @@ public class BookingControllerTest {
         when(bookingService.getBookingsByOwner(1, "ALL", 1, 2)).thenReturn(List.of(responseDto));
 
         mockMvc.perform(get("/bookings/owner")
+                .param("state", "ALL")
+                .param("from", "1")
+                .param("size", "2")
                 .header("X-Sharer-User-Id", booker.getId()))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$[0].id").value(1))
