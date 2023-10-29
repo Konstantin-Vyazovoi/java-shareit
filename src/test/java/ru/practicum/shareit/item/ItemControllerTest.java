@@ -62,6 +62,8 @@ public class ItemControllerTest {
         end = start.plusDays(1);
         lastBooking = new BookingItemDto(1, 1);
         nextBooking = new BookingItemDto(1, 1);
+        nextBooking.setId(2);
+        nextBooking.setBookerId(1);
     }
 
     @SneakyThrows

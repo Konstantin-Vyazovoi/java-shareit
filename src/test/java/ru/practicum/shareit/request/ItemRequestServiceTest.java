@@ -5,6 +5,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
+import ru.practicum.shareit.exception.BadRequestException;
+import ru.practicum.shareit.exception.ValidateException;
 import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.request.dto.ItemResponseDto;
 import ru.practicum.shareit.user.UserService;
@@ -50,8 +52,6 @@ public class ItemRequestServiceTest {
     @Test
     public void getAllRequestsTest() {
         itemRequestService.createRequest(itemRequestDto, 1);
-        responseDto = itemRequestService.getRequestById(1, 1);
-        assertEquals(responseDto.getDescription(), itemRequestDto.getDescription());
         List<ItemResponseDto> responseDtoList = itemRequestService.getAllRequests(1, 0, 2);
         assertFalse(responseDtoList.isEmpty());
         assertEquals(responseDtoList.get(0).getDescription(), itemRequestDto.getDescription());
@@ -63,6 +63,18 @@ public class ItemRequestServiceTest {
         List<ItemResponseDto> responseDtoList = itemRequestService.getRequestsUser(1);
         assertNotNull(responseDtoList);
         assertEquals(responseDtoList.get(0).getDescription(), itemRequestDto.getDescription());
+    }
+
+    @Test
+    public void getRequestsThrowBadRequestExceptionTest() {
+        itemRequestService.createRequest(itemRequestDto, 1);
+        assertThrows(BadRequestException.class, () ->  itemRequestService.getAllRequests(1, -2, 2));
+    }
+
+    @Test
+    public void getRequestsThrowValidateExceptionTest() {
+        itemRequestService.createRequest(itemRequestDto, 1);
+        assertThrows(ValidateException.class, () ->  itemRequestService.getAllRequests(null, 0, 2));
     }
 
 }

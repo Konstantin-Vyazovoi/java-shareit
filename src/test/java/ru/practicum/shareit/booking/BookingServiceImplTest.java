@@ -9,6 +9,8 @@ import org.springframework.test.annotation.DirtiesContext;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.BookingResponseDto;
 import ru.practicum.shareit.booking.model.BookingStatus;
+import ru.practicum.shareit.exception.BadRequestException;
+import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.item.ItemService;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.user.UserService;
@@ -19,10 +21,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-public class BookingServiceImplIntegrationTest {
+public class BookingServiceImplTest {
 
     @Autowired
     private BookingServiceImpl bookingService;
@@ -72,6 +75,19 @@ public class BookingServiceImplIntegrationTest {
     }
 
     @Test
+    public void createBookingThrowNotFoundExceptionTest() {
+        bookingDto.setItemId(2);
+        assertThrows(NotFoundException.class, () -> bookingService.createBooking(bookingDto, 2));
+    }
+
+    @Test
+    public void createBookingThrowBadRequestExceptionTest() {
+        itemDto.setAvailable(false);
+        itemService.updateItem(1, itemDto, 1);
+        assertThrows(BadRequestException.class, () -> bookingService.createBooking(bookingDto, 2));
+    }
+
+    @Test
     public void updateBookingTest() {
         BookingResponseDto responseDto = bookingService.createBooking(bookingDto, 2);
         Assertions.assertNotNull(responseDto);
@@ -111,6 +127,12 @@ public class BookingServiceImplIntegrationTest {
         responseDtoList = bookingService.getBookings(2, "WAITING", 1, 2);
         Assertions.assertNotNull(responseDtoList);
         assertEquals(responseDtoList.size(), 1);
+    }
+
+    @Test
+    public void getUserBookingsThrowBadRequestExceptionTest() {
+        bookingService.createBooking(bookingDto, 2);
+        assertThrows(BadRequestException.class, () -> bookingService.getBookings(2, "ALL", -1, 2));
     }
 
     @Test

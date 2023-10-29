@@ -106,7 +106,14 @@ public class ItemServiceTest {
     public void searchItemTest() {
         UserDto user = userService.createUser(userDto);
         assertNotNull(user.getId());
+        ItemDto itemDto1 = ItemDto.builder()
+            .id(2)
+            .name("Chair")
+            .description("Description")
+            .available(true)
+            .build();
         itemService.createItem(itemDto, user.getId());
+        itemService.createItem(itemDto1, user.getId());
         List<ItemDto> items = itemService.searchItems("It");
         assertEquals(items.size(), 1);
         assertEquals(itemDto.getName(), items.get(0).getName());
