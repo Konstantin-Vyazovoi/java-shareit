@@ -68,13 +68,13 @@ public class ItemRequestServiceTest {
     @Test
     public void getRequestsThrowBadRequestExceptionTest() {
         itemRequestService.createRequest(itemRequestDto, 1);
-        assertThrows(BadRequestException.class, () ->  itemRequestService.getAllRequests(1, -2, 2));
+        assertThrows(BadRequestException.class, () -> itemRequestService.getAllRequests(1, -2, 2));
     }
 
     @Test
     public void getRequestsThrowValidateExceptionTest() {
         itemRequestService.createRequest(itemRequestDto, 1);
-        assertThrows(ValidateException.class, () ->  itemRequestService.getAllRequests(null, 0, 2));
+        assertThrows(ValidateException.class, () -> itemRequestService.getAllRequests(null, 0, 2));
     }
 
 }
