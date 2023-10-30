@@ -44,7 +44,7 @@ public class UserServiceTest {
     }
 
     @Test
-    void addUser_ValidUserDto_ShouldReturnUserDto() {
+    void addUserValidUserDtoShouldReturnUserDto() {
         when(userRepository.save(Mockito.any(User.class))).thenReturn(user);
 
         UserDto result = userService.createUser(userDto);

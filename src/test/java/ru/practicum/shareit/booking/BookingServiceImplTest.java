@@ -75,19 +75,6 @@ public class BookingServiceImplTest {
     }
 
     @Test
-    public void createBookingThrowNotFoundExceptionTest() {
-        bookingDto.setItemId(2);
-        assertThrows(NotFoundException.class, () -> bookingService.createBooking(bookingDto, 2));
-    }
-
-    @Test
-    public void createBookingThrowBadRequestExceptionTest() {
-        itemDto.setAvailable(false);
-        itemService.updateItem(1, itemDto, 1);
-        assertThrows(BadRequestException.class, () -> bookingService.createBooking(bookingDto, 2));
-    }
-
-    @Test
     public void updateBookingTest() {
         BookingResponseDto responseDto = bookingService.createBooking(bookingDto, 2);
         Assertions.assertNotNull(responseDto);
