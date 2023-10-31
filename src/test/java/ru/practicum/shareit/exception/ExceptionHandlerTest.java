@@ -10,7 +10,7 @@ public class ExceptionHandlerTest {
     private final ErrorHandler errorHandler = new ErrorHandler();
 
     @Test
-    public void NotFoundTest() {
+    public void MessageTest() {
         NotFoundException exception = new NotFoundException("Message");
         ErrorResponse errorResponse = new ErrorResponse("Message");
         assertEquals("Message", exception.getMessage());
