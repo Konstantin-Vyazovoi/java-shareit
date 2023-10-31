@@ -1,6 +1,5 @@
 package ru.practicum.shareit.exception;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -8,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 public class ExceptionHandlerTest {
-    private ErrorHandler errorHandler = new ErrorHandler();
+    private final ErrorHandler errorHandler = new ErrorHandler();
 
     @Test
     public void NotFoundExceptionTest() {
