@@ -11,6 +11,7 @@ public class ExceptionHandlerTest {
 
     @Test
     public void getTest() {
+
         NotFoundException exception = new NotFoundException("Message");
         ErrorResponse errorResponse = new ErrorResponse("Message");
         assertEquals("Message", exception.getMessage());
