@@ -2,10 +2,6 @@ package ru.practicum.shareit.exception;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import ru.practicum.shareit.booking.dto.BookingMapper;
-import ru.practicum.shareit.item.dto.ItemMapper;
-import ru.practicum.shareit.request.dto.ItemRequestMapper;
-import ru.practicum.shareit.user.dto.UserMapper;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
