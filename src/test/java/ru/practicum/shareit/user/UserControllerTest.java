@@ -114,4 +114,23 @@ public class UserControllerTest {
 
     }
 
+    @SneakyThrows
+    @Test
+    void deleteUserTest() {
+
+        UserDto createUserDto = new UserDto(1, "User", "user@email.com");
+        Mockito.when(userService.createUser(createUserDto)).thenReturn(createUserDto);
+
+        mockMvc.perform(post("/users")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(createUserDto)))
+            .andExpect(MockMvcResultMatchers.status().isOk());
+
+        mockMvc.perform(delete("/users/{id}", 1)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(createUserDto)))
+            .andExpect(MockMvcResultMatchers.status().isOk());
+
+    }
+
 }
