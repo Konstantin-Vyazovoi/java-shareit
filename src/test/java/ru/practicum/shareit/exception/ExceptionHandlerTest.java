@@ -12,10 +12,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @SpringBootTest
 public class ExceptionHandlerTest {
     private final ErrorHandler errorHandler = new ErrorHandler();
-    private UserMapper userMapper;
-    private ItemMapper itemMapper;
-    private ItemRequestMapper itemRequestMapper;
-    private BookingMapper bookingMapper;
 
     @Test
     public void getTest() {
