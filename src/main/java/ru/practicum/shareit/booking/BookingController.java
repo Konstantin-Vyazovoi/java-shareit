@@ -8,7 +8,6 @@ import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.BookingResponseDto;
 import ru.practicum.shareit.interfaces.CreateGroup;
 
-import javax.validation.constraints.Min;
 import java.util.List;
 
 @Slf4j

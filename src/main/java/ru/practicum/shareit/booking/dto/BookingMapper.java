@@ -9,13 +9,6 @@ import java.util.stream.Collectors;
 @UtilityClass
 public class BookingMapper {
 
-    public static BookingDto toBookingDto(Booking booking) {
-        BookingDto bookingDto = new BookingDto();
-        bookingDto.setStart(booking.getStartDate());
-        bookingDto.setEnd(booking.getEndDate());
-        return bookingDto;
-    }
-
     public static Booking toBooking(BookingDto bookingDto) {
         Booking booking = new Booking();
         if (bookingDto.getStart() != null) booking.setStartDate(bookingDto.getStart());

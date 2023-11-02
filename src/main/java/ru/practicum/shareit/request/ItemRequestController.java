@@ -8,8 +8,6 @@ import ru.practicum.shareit.interfaces.CreateGroup;
 import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.request.dto.ItemResponseDto;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 import java.util.List;
 
 @Slf4j
@@ -27,7 +25,7 @@ public class ItemRequestController {
 
     @PostMapping
     public ItemResponseDto createRequest(@RequestHeader(headerUserId) Integer userId,
-                                         @RequestBody @Validated(CreateGroup.class)ItemRequestDto itemRequestDto) {
+                                         @RequestBody @Validated(CreateGroup.class) ItemRequestDto itemRequestDto) {
         log.info("Получен запрос на создание запрса: {}", itemRequestDto);
         return requestService.createRequest(itemRequestDto, userId);
     }
@@ -52,4 +50,5 @@ public class ItemRequestController {
         log.info("Получен запрос получения списка запросов от пользователя с id: {}", userId);
         return requestService.getAllRequests(userId, from, size);
     }
+
 }

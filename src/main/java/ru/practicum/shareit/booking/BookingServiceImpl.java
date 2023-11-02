@@ -47,12 +47,6 @@ public class BookingServiceImpl implements BookingService {
         validateDate(bookingDto);
         User booker = validateUser(bookerId);
         Item item = validateItem(bookingDto);
-        if (item == null)
-            throw new NotFoundException(
-                String.format("Предмет с id %s не найден", bookingDto.getItemId()));
-        if (!item.getAvailable())
-            throw new BadRequestException(
-                String.format("Предмет с id %s занят", bookingDto.getItemId()));
         if (item.getOwnerId() == bookerId) throw new NotFoundException("Нельзя взять в аренду свой предмет");
         Booking booking = toBooking(bookingDto);
         booking.setStatus(BookingStatus.WAITING);
@@ -97,9 +91,7 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public List<BookingResponseDto> getBookings(Integer bookerId, String status, Integer from, Integer size) {
-        if (from < 0 || size < 0)
-            throw new BadRequestException(
-                String.format("Не правильные значения from = %s, size = %s" , from, size));
+        validatePageParam(from, size);
         validateUser(bookerId);
         LocalDateTime dateNow = LocalDateTime.now();
         Pageable pageable = PageRequest.of(from / size, size);
@@ -139,9 +131,7 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public List<BookingResponseDto> getBookingsByOwner(Integer userId, String status, Integer from, Integer size) {
-        if (from < 0 || size < 0)
-            throw new BadRequestException(
-                String.format("Не правильные значения from = %s, size = %s" , from, size));
+        validatePageParam(from, size);
         validateUser(userId);
         LocalDateTime dateNow = LocalDateTime.now();
         Pageable pageable = PageRequest.of(from / size, size);
@@ -203,6 +193,12 @@ public class BookingServiceImpl implements BookingService {
         Optional<Booking> booking = bookingRepository.findById(bookingId);
         if (booking.isEmpty()) throw new NotFoundException(String.format("Бронирование с id %s не найдено", bookingId));
         return booking.get();
+    }
+
+    private void validatePageParam(Integer from, Integer size) {
+        if (from < 0 || size < 0)
+            throw new BadRequestException(
+                String.format("Не правильные значения from = %s, size = %s", from, size));
     }
 
 }

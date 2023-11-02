@@ -21,17 +21,6 @@ public class ItemMapper {
             item.getRequestId());
     }
 
-    public ItemDto toItemDtoWithRequest(Item item) {
-        ItemDto itemDto = ItemDto.builder()
-            .id(item.getId())
-            .available(item.getAvailable())
-            .requestId(item.getRequestId())
-            .description(item.getDescription())
-            .name(item.getName())
-            .build();
-        return itemDto;
-    }
-
     public Item fromItemDto(ItemDto itemDto) {
         return new Item(itemDto.getId(),
             itemDto.getName(),
